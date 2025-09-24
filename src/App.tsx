@@ -4,7 +4,8 @@ import {
   RouterProvider, 
   createRootRoute, 
   createRoute as createTanStackRoute, 
-  Outlet 
+  Outlet,
+  NotFoundRoute
 } from '@tanstack/react-router'
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -21,13 +22,19 @@ const rootRoute = createRootRoute({
   component: () => (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
+        <Outlet />
         <Toaster />
         <Sonner />
-        <Outlet />
       </TooltipProvider>
     </QueryClientProvider>
   ),
 })
+
+// Create a 404 Route
+const notFoundRoute = new NotFoundRoute({
+  getParentRoute: () => rootRoute,
+  component: NotFound,
+});
 
 // Create index route
 const indexRoute = createTanStackRoute({
@@ -49,9 +56,9 @@ const routeTree = rootRoute.addChildren([indexRoute, gameRoute])
 // Create router with proper TypeScript configuration
 const router = createRouter({ 
   routeTree,
+  notFoundRoute,
   defaultPreload: 'intent' as const,
   defaultPreloadStaleTime: 0,
-  notFoundComponent: NotFound,
 })
 
 // Register router for type safety
