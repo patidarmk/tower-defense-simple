@@ -8,13 +8,15 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { cn } from '@/lib/utils';
 
 interface TowerPanelProps {
   onSelectTower: (tower: Tower) => void;
   money: number;
+  selectedTower?: Tower;
 }
 
-export const TowerPanel = ({ onSelectTower, money }: TowerPanelProps) => {
+export const TowerPanel = ({ onSelectTower, money, selectedTower }: TowerPanelProps) => {
   return (
     <Card className="bg-black/20 backdrop-blur-md border-slate-500/30 text-white">
       <CardHeader>
@@ -26,7 +28,10 @@ export const TowerPanel = ({ onSelectTower, money }: TowerPanelProps) => {
             <TooltipTrigger asChild>
               <Button
                 variant="outline"
-                className="h-auto p-3 flex flex-col items-center justify-center gap-2 bg-slate-700/50 border-slate-500/50 hover:bg-slate-600/70 disabled:opacity-40 transition-all duration-200 transform hover:scale-105 active:scale-100"
+                className={cn(
+                    "h-auto p-3 flex flex-col items-center justify-center gap-2 bg-slate-700/50 border-slate-500/50 hover:bg-slate-600/70 disabled:opacity-40 transition-all duration-200 transform hover:scale-105 active:scale-100",
+                    selectedTower?.id === tower.id && "ring-2 ring-yellow-400 bg-slate-600/70"
+                )}
                 onClick={() => onSelectTower(tower)}
                 disabled={money < tower.cost}
               >
